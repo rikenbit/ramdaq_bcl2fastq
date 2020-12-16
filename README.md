@@ -28,9 +28,11 @@ Copyright (c) 2007-2015 Illumina, Inc.
 
 ```bash
 # Run bcl2fastq via nextflow
-nextflow rikenbit/ramdaq_bcl2fastq -profile <docker/singularity> --run_dir <directory path>
+nextflow run rikenbit/ramdaq_bcl2fastq -r main -profile <docker/singularity> --run_dir <directory path>
 ```
 ### Required parameters
+- -r main
+    - Need to specify explicitly the [revision](https://github.com/rikenbit/ramdaq_bcl2fastq/releases) of the ramdaq_bcl2fastq
 - --run_dir
     - Requires a BaseCalls directory path(full) containing the binary base call files (BCL files)
     - ex: ${required directory path}/Data/Intensities/BaseCalls
