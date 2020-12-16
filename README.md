@@ -31,16 +31,16 @@ Copyright (c) 2007-2015 Illumina, Inc.
 nextflow rikenbit/ramdaq_bcl2fastq -profile <docker/singularity> --run_dir <directory path>
 ```
 ### Required parameters
-- -profile
-    - Use this parameter to choose a configuration profile. Profiles can give configuration presets for different compute environments.
-    - We highly recommend the use of Docker or Singularity containers for full pipeline reproducibility. If -profile is not specified, the pipeline will run locally and expect software to be installed and available on the PATH. 
-        - docker : A generic configuration profile to be used with Docker
-        - singularity : A generic configuration profile to be used with Singularity
 - --run_dir
     - Requires a BaseCalls directory path(full) containing the binary base call files (BCL files)
     - ex: ${required directory path}/Data/Intensities/BaseCalls
 
 ### Other options
+- -profile <docker/singularity>
+    - Use this parameter to choose a configuration profile. Profiles can give configuration presets for different compute environments.
+    - We highly recommend the use of Docker or Singularity containers for full pipeline reproducibility. If -profile is not specified, the pipeline will run locally and expect software to be installed and available on the PATH. 
+        - -profile docker : A generic configuration profile to be used with Docker
+        - -profile singularity : A generic configuration profile to be used with Singularity
 - --lane_splitting
     - If this option is specified, output fastq files are split by lane
 - --outdir
