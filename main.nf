@@ -24,7 +24,7 @@ def helpMessage() {
       --no_lane_splitting                 Do not split FASTQ files by lane.
     
     Other options:
-      --outdir [file]                     The output directory where the results will be saved
+      --outdir [file]                     The output directory where the results will be saved (Default: results)
       -name [str]                         Name for the pipeline run. If not specified, Nextflow will automatically generate a random mnemonic
     """.stripIndent()
 }
@@ -68,7 +68,7 @@ summary['Run Name']                          = custom_runName ?: workflow.runNam
 // TODO nf-core: Report custom parameters here
 summary['Samplesheet']                       = params.input
 summary['Run Directory']                     = params.run_dir
-if (params.no_lane_splitting)                summary['No Lane Splitting'] = params.no_lane_splitting
+if (params.lane_splitting)                summary['Lane Splitting'] = params.lane_splitting
 
 summary['Max Resources']                     = "$params.max_memory memory, $params.max_cpus cpus, $params.max_time time per job"
 if (workflow.containerEngine) summary['Container'] = "$workflow.containerEngine - $workflow.container"
@@ -114,7 +114,7 @@ process bcl2fastq  {
     file "Stats"
 
     script:
-    no_lane_split = params.no_lane_splitting ? "--no-lane-splitting " : ""
+    lane_split = params.lane_splitting ? "" : "--no-lane-splitting"
 
     """
     bcl2fastq \\
@@ -124,9 +124,9 @@ process bcl2fastq  {
         --interop-dir ${ch_runDir}/InterOp \\
         --input-dir ${ch_runDir}/Data/Intensities/BaseCalls \\
         --stats-dir ./Stats \\
-        --reports-dir ./Reports
-        $no_lane_split
-    rm -rf */Undetermined*
+        --reports-dir ./Reports \\
+        $lane_split
+    rm -rf ./Undetermined*
     """
 }
 
