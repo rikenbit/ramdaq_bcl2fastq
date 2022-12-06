@@ -1,7 +1,7 @@
 # bcl2fastq2
 
 # Set the base image to CentOS 6
-FROM centos:6
+FROM centos:7
 
 LABEL maintainer Hiroki Danno <redgrapefruit@mac.com>, Haruka Ozaki <harukao.cb@gmail.com>
 
