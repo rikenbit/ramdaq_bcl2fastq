@@ -24,6 +24,7 @@ def helpMessage() {
 
     bcl2fastq
       --run_dir [file]                    Full path to run directory (will parse name of run from the last directory in path)
+      --sheet_path [file]                 Full path to sample sheet CSV (Default: <run_dir>/SampleSheet.csv)
       --lane_splitting                     Split FASTQ files by lane (Default: false, i.e. no lane splitting).
 
     Other options:
@@ -52,7 +53,13 @@ if (!(workflow.runName ==~ /[a-z]+_[a-z]+/)) {
 // ////////////////////////////////////////////////////
 
 if (params.run_dir) { ch_runDir = file(params.run_dir, checkIfExists: true) } else { exit 1, "Run directory not found!" }
-if (params.run_dir) { ch_ssheet = file("${params.run_dir}/SampleSheet.csv", checkIfExists: true) } else { exit 1, "Sample sheet not found!" }
+if (params.sheet_path) {
+    ch_ssheet = file(params.sheet_path, checkIfExists: true)
+} else if (params.run_dir) {
+    ch_ssheet = file("${params.run_dir}/SampleSheet.csv", checkIfExists: true)
+} else {
+    exit 1, "Sample sheet not found!"
+}
 runName = ch_runDir.getName()
 
 // Header log info
@@ -60,7 +67,7 @@ log.info nfcoreHeader()
 def summary = [:]
 if (workflow.revision) summary['Pipeline Release'] = workflow.revision
 summary['Run Name']                          = custom_runName ?: workflow.runName
-summary['Samplesheet']                       = "${params.run_dir}/SampleSheet.csv"
+summary['Samplesheet']                       = params.sheet_path ?: "${params.run_dir}/SampleSheet.csv"
 summary['Run Directory']                     = params.run_dir
 if (params.lane_splitting)                summary['Lane Splitting'] = params.lane_splitting
 summary['Max Resources']                     = "$params.max_memory memory, $params.max_cpus cpus, $params.max_time time per job"
